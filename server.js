@@ -1,45 +1,38 @@
-/* 
-INSTRUÇÕES PARA O PROFESSOR ALISON:
-1. Crie uma pasta nova no seu computador.
-2. Salve este arquivo dentro dela com o nome 'server.js'.
-3. Abra o terminal nessa pasta e rode o comando:
-   npm init -y
-4. Em seguida, instale as dependências:
-   npm install express cors redis
-5. Altere a string de conexão na linha 14 para a URL do seu Redis Cloud.
-6. Rode o servidor:
-   node server.js
-7. (No HTML redis_demo.html que gerei, mude a variável 'isSimulating' para 'false' na linha 95)
-*/
+import 'dotenv/config'; // Carrega o .env
+import express from 'express';
+import cors from 'cors';
 
-const express = require('express');
-const cors = require('cors');
-const { createClient } = require('redis');
+// Importa Conexões
+import conectarMongo from './config/mongo.js';
+import conectarMySQL from './config/mysql.js';
+
+// Importa Rotas
+import rotas from './routes.js';
 
 const app = express();
-const PORT = 3000;
 
-// Middleware para permitir requisições do frontend (HTML) e entender JSON
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// SUBSTITUA PELA SUA URL DO REDISLABS/REDIS CLOUD:
-const REDIS_URL = 'redis://default:y38T1h3NOk2LnEo3bXxJkXIzMaLVUfME@juniper-spot-knot-93064.db.redis.io:11622';
+// Acopla as rotas no caminho /api
+app.use('/api', rotas);
 
-const redisClient = createClient({
-    url: REDIS_URL
+// Inicia as conexões
+async function boot() {
+    console.log("⚡ Iniciando a Operação Poliglota...");
+    await conectarMongo();
+    await conectarMySQL();
+    // Redis conecta automaticamente no arquivo config/redis.js
+}
+boot();
+
+app.get('/', (req, res) => {
+    res.json({ mensagem: "Bem-vindo a API do CyberMarket!" });
 });
 
-redisClient.on('error', (err) => console.log('Erro no Cliente Redis', err));
-redisClient.on('connect', () => console.log('✅ Conectado ao Servidor Redis!'));
-
-// Conecta o cliente assim que o servidor inicia
-redisClient.connect().catch(console.error);
-
-
-// Rota 1: Ping simples para testar se a API está online
-app.get('/ping', (req, res) => {
-    console.log('[API] Rota /ping acessada');
-    res.json({ status: 'online', message: 'API Node.js respondendo!' });
+// Liga o servidor
+const PORTA = process.env.PORTA_API || 3000;
+app.listen(PORTA, () => {
+    console.log(`🚀 Servidor voando na porta http://localhost:${PORTA}`);
 });
-

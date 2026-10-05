@@ -1,17 +1,29 @@
 {
-  "name": "redis",
+  "name": "cybermarket-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "API poliglota do CyberMarket",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"No tests configured\" && exit 0"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "redis",
+    "mysql"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^16.4.7",
     "express": "^5.2.1",
+    "mongoose": "^8.8.3",
+    "mysql2": "^3.4.2",
     "redis": "^6.2.1"
   }
 }
