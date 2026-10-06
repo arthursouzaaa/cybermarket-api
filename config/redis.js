@@ -1,8 +1,6 @@
 import { createClient } from 'redis';
 
-const redisUrl = process.env.REDIS_URL && process.env.REDIS_URL.startsWith('redis://')
-    ? process.env.REDIS_URL
-    : 'redis://localhost:6379';
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
 const redisClient = createClient({
     url: redisUrl,
