@@ -1,38 +1,33 @@
-import 'dotenv/config'; // Carrega o .env
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 
-// Importa Conexões
 import conectarMongo from './config/mongo.js';
-import conectarMySQL from './config/mysql.js';
+import conectarSupabase from './config/supabase.js';
 
-// Importa Rotas
 import rotas from './routes.js';
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+app.use(cors({
+  origin: true,           // aceita qualquer origem (útil pra dev)
+  credentials: true
+}));
 app.use(express.json());
-
-// Acopla as rotas no caminho /api
 app.use('/api', rotas);
 
-// Inicia as conexões
 async function boot() {
-    console.log("⚡ Iniciando a Operação Poliglota...");
-    await conectarMongo();
-    await conectarMySQL();
-    // Redis conecta automaticamente no arquivo config/redis.js
+  console.log("⚡ Iniciando a Operação Poliglota...");
+  await conectarMongo();
+  await conectarSupabase();
 }
 boot();
 
 app.get('/', (req, res) => {
-    res.json({ mensagem: "Bem-vindo a API do CyberMarket!" });
+  res.json({ mensagem: "Bem-vindo a API do CyberMarket!" });
 });
 
-// Liga o servidor
 const PORTA = process.env.PORTA_API || 3000;
 app.listen(PORTA, () => {
-    console.log(`🚀 Servidor voando na porta http://localhost:${PORTA}`);
+  console.log(`🚀 Servidor voando na porta http://localhost:${PORTA}`);
 });
