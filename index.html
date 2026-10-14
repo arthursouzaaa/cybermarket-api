@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberMarket — Periféricos Gamer</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          ink: { 950: '#05060f', 900: '#0a0c1a', 800: '#111424', 700: '#1b1f38' },
+          neon: { blue: '#3b82f6', cyan: '#22d3ee', purple: '#a855f7', pink: '#ec4899', green: '#22c55e', amber: '#f59e0b' }
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  body { background: #05060f; }
+  .glass { background: rgba(17,20,36,.7); backdrop-filter: blur(14px); border: 1px solid rgba(59,130,246,.15); }
+  .glow-blue { box-shadow: 0 0 30px -8px rgba(59,130,246,.55); }
+  .glow-purple { box-shadow: 0 0 30px -8px rgba(168,85,247,.55); }
+  .glow-green { box-shadow: 0 0 30px -8px rgba(34,197,94,.55); }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(59,130,246,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .card-hover { transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, border-color .3s; }
+  .card-hover:hover { transform: translateY(-6px); }
+  .drawer { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #05060f; }
+  ::-webkit-scrollbar-thumb { background: #1b1f38; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2a3055; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .slide-up { animation: slideUp .35s ease-out; }
+  @keyframes pulse-dot { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+  .dot-pulse { animation: pulse-dot 1s ease-in-out infinite; }
+  .badge { font-size: .65rem; letter-spacing: .05em; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+</style>
+</head>
+
+<body class="min-h-screen text-slate-200 font-sans grid-bg">
+
+  <!-- fundo decorativo -->
+  <div class="fixed inset-0 pointer-events-none -z-10">
+    <div class="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-neon-blue/20 blur-[120px]"></div>
+    <div class="absolute bottom-[-15%] right-[-10%] w-[600px] h-[600px] rounded-full bg-neon-purple/20 blur-[140px]"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/70 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center glow-blue">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7h18l-1.5 12.5a2 2 0 0 1-2 1.5h-11a2 2 0 0 1-2-1.5L3 7z"/>
+            <path d="M8 7V5a4 4 0 0 1 8 0v2"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-tight">
+            <span class="text-white">Cyber</span><span class="bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple bg-clip-text text-transparent">Market</span>
+          </h1>
+          <p class="text-[11px] text-slate-500 tracking-widest font-mono">API POLIGLOTA · DS/13-N</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="hidden sm:flex items-center gap-2 text-[11px] font-mono">
+          <span class="badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">🟢 MONGO</span>
+          <span class="badge bg-sky-500/10 text-sky-400 border border-sky-500/30">🔵 REDIS</span>
+          <span class="badge bg-purple-500/10 text-purple-400 border border-purple-500/30">🟣 SQL</span>
+        </div>
+
+        <button onclick="abrirModalBancos()" class="px-3 sm:px-4 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition font-semibold text-white flex items-center gap-2 text-sm">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+          <span class="hidden sm:inline">Bancos</span>
+        </button>
+
+        <button onclick="abrirModalProduto()" class="px-3 sm:px-4 h-11 rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple hover:opacity-90 transition font-semibold text-white shadow-lg shadow-neon-blue/20 flex items-center gap-2 text-sm">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="hidden sm:inline">Novo Produto</span>
+        </button>
+
+        <button onclick="abrirCarrinho()" class="relative w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.7 13.4A2 2 0 0 0 9.7 16H19a2 2 0 0 0 2-1.6L23 6H6"/>
+          </svg>
+          <span id="badge-carrinho" class="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-gradient-to-br from-neon-pink to-neon-purple text-white text-[10px] font-bold flex items-center justify-center hidden">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- HERO -->
+    <section class="glass rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-neon-blue/5 via-transparent to-neon-purple/5"></div>
+      <div class="relative grid md:grid-cols-[1fr,auto] gap-6 items-center">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-2">
+            Periféricos <span class="bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">gamer</span> de verdade.
+          </h2>
+          <p class="text-slate-400 max-w-xl">
+            Catálogo no <span class="text-emerald-400 font-semibold">MongoDB</span>, carrinho temporário no
+            <span class="text-sky-400 font-semibold">Redis</span> e pedidos no <span class="text-purple-400 font-semibold">PostgreSQL (Supabase)</span>.
+          </p>
+        </div>
+
+        <div class="w-full md:w-80">
+          <label class="block text-xs font-mono uppercase tracking-widest text-slate-500 mb-2">Identifique-se para usar o carrinho</label>
+          <div class="flex gap-2">
+            <input id="input-usuario" type="text" placeholder="ex: arthur"
+              class="flex-1 bg-ink-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-blue/60 focus:ring-2 focus:ring-neon-blue/20 text-white placeholder-slate-600 transition" />
+            <button onclick="salvarUsuario()" class="px-4 py-3 rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple hover:opacity-90 transition font-semibold text-white shadow-lg shadow-neon-blue/20">
+              OK
+            </button>
+          </div>
+          <p id="usuario-status" class="text-xs text-slate-500 mt-2 font-mono">Nenhum usuário definido ainda</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <section>
+      <div class="flex items-end justify-between mb-5">
+        <div>
+          <h3 class="text-2xl font-bold text-white">Catálogo</h3>
+          <p class="text-sm text-slate-500">Fonte: <span class="text-emerald-400 font-mono">GET /api/produtos</span> → MongoDB</p>
+        </div>
+        <button onclick="carregarProdutos()" class="text-xs font-mono text-slate-400 hover:text-white transition flex items-center gap-2">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>
+          </svg>
+          recarregar
+        </button>
+      </div>
+
+      <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl h-[360px] animate-pulse"></div>
+        <div class="glass rounded-2xl h-[360px] animate-pulse"></div>
+        <div class="glass rounded-2xl h-[360px] animate-pulse"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OVERLAY -->
+  <div id="overlay" onclick="fecharCarrinho()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden"></div>
+
+  <!-- DRAWER CARRINHO -->
+  <aside id="drawer" class="drawer fixed top-0 right-0 h-full w-full sm:w-[420px] bg-ink-900 border-l border-white/10 z-50 translate-x-full flex flex-col">
+    <div class="p-5 border-b border-white/10 flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-neon-blue" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.7 13.4A2 2 0 0 0 9.7 16H19a2 2 0 0 0 2-1.6L23 6H6"/>
+          </svg>
+          Seu Carrinho
+        </h3>
+        <p id="drawer-usuario" class="text-xs text-slate-500 font-mono mt-1">usuário: —</p>
+      </div>
+      <button onclick="fecharCarrinho()" class="w-9 h-9 rounded-lg hover:bg-white/10 transition flex items-center justify-center">
+        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div id="aviso-ttl" class="hidden mx-4 mt-4 rounded-xl border border-sky-500/30 bg-sky-500/5 px-3 py-2 text-xs items-center justify-between">
+      <span class="text-sky-300 font-mono flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-sky-400 dot-pulse"></span>
+        Expira em
+      </span>
+      <span id="ttl-valor" class="font-mono font-bold text-white">--:--</span>
+    </div>
+
+    <div id="lista-carrinho" class="flex-1 overflow-y-auto p-4 space-y-3">
+      <div class="text-center text-slate-500 py-16">
+        <svg viewBox="0 0 24 24" class="w-14 h-14 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.7 13.4A2 2 0 0 0 9.7 16H19a2 2 0 0 0 2-1.6L23 6H6"/>
+        </svg>
+        <p class="text-sm">Carrinho vazio</p>
+        <p class="text-xs mt-1">Adicione produtos do catálogo</p>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 p-5 space-y-4 bg-ink-950/60">
+      <div class="flex items-center justify-between">
+        <span class="text-slate-400 text-sm">Total</span>
+        <span id="valor-total" class="text-2xl font-black text-white">R$ 0,00</span>
+      </div>
+      <button id="btn-checkout" onclick="finalizarCompra()" disabled
+        class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-neon-green to-emerald-500 hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed glow-green">
+        Finalizar Compra
+      </button>
+      <p class="text-[11px] text-center text-slate-500 font-mono">POST /api/pedidos → PostgreSQL (Supabase)</p>
+    </div>
+  </aside>
+
+  <!-- PAINEL DE LOG -->
+  <div class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-[380px] z-20">
+    <div class="glass rounded-xl overflow-hidden">
+      <button onclick="toggleLog()" class="w-full px-4 py-2.5 flex items-center justify-between border-b border-white/10 hover:bg-white/5 transition">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 dot-pulse"></span>
+          <span class="text-xs font-mono uppercase tracking-widest text-slate-300">Painel de Log</span>
+        </div>
+        <svg id="icone-log" viewBox="0 0 24 24" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div id="log-body" class="max-h-48 overflow-y-auto p-3 space-y-1.5 font-mono text-[11px]">
+        <div class="text-slate-500">Aguardando ações...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SUCESSO -->
+  <div id="modal-sucesso" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="fecharSucesso()"></div>
+    <div class="relative glass rounded-2xl max-w-md w-full p-8 text-center slide-up border border-emerald-500/30 glow-green">
+      <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-neon-green to-emerald-500 flex items-center justify-center">
+        <svg viewBox="0 0 24 24" class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3 class="text-2xl font-black text-white mb-2">Pedido Confirmado!</h3>
+      <p class="text-slate-400 text-sm mb-4">Seu pedido foi salvo no banco relacional.</p>
+      <div class="rounded-xl bg-ink-950/60 border border-white/10 p-4 mb-6">
+        <p class="text-xs text-slate-500 font-mono mb-1">ID DO PEDIDO</p>
+        <p id="pedido-id" class="text-3xl font-black bg-gradient-to-r from-neon-green to-emerald-400 bg-clip-text text-transparent">#0</p>
+      </div>
+      <button onclick="fecharSucesso()" class="w-full py-3 rounded-xl font-bold bg-white/5 hover:bg-white/10 border border-white/10 transition">
+        Continuar comprando
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast-container" class="fixed top-20 right-4 z-[70] space-y-2"></div>
+
+  <!-- MODAL NOVO PRODUTO -->
+  <div id="modal-produto" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="fecharModalProduto()"></div>
+    <div class="relative glass rounded-2xl max-w-md w-full p-6 slide-up border border-neon-blue/30">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-xl font-black text-white flex items-center gap-2">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-neon-blue" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Cadastrar Produto
+        </h3>
+        <button onclick="fecharModalProduto()" class="w-8 h-8 rounded-lg hover:bg-white/10 transition flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-slate-500 mb-2">Nome do produto</label>
+          <input id="prod-nome" type="text" placeholder="ex: Headset HyperX" class="w-full bg-ink-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-blue/60 text-white placeholder-slate-600 transition" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-slate-500 mb-2">Preço (R$)</label>
+          <input id="prod-preco" type="number" step="0.01" min="0" placeholder="ex: 349.90" class="w-full bg-ink-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-blue/60 text-white placeholder-slate-600 transition" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-slate-500 mb-2">URL da imagem (opcional)</label>
+          <input id="prod-imagem" type="url" placeholder="https://..." class="w-full bg-ink-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-neon-blue/60 text-white placeholder-slate-600 transition text-sm" />
+        </div>
+
+        <div class="rounded-xl bg-emerald-500/5 border border-emerald-500/20 px-3 py-2 text-xs font-mono text-emerald-300">
+          POST /api/produtos → <span class="text-emerald-400 font-bold">MongoDB</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mt-6">
+        <button onclick="fecharModalProduto()" class="flex-1 py-3 rounded-xl font-bold bg-white/5 hover:bg-white/10 border border-white/10 transition">
+          Cancelar
+        </button>
+        <button id="btn-salvar-produto" onclick="salvarProduto()" class="flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-neon-blue to-neon-purple hover:opacity-90 transition glow-blue">
+          Salvar no Mongo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL BANCOS -->
+  <div id="modal-bancos" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="fecharModalBancos()"></div>
+    <div class="relative glass rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto p-6 slide-up border border-neon-blue/30">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h3 class="text-2xl font-black text-white">Bancos em Tempo Real</h3>
+          <p class="text-xs text-slate-500 font-mono">atualizando a cada 3s</p>
+        </div>
+        <button onclick="fecharModalBancos()" class="w-8 h-8 rounded-lg hover:bg-white/10 transition flex items-center justify-center">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div class="rounded-xl bg-ink-950/60 border border-emerald-500/20 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">MONGO</span>
+            <span class="text-xs text-slate-500 font-mono">catálogo</span>
+          </div>
+          <p class="text-4xl font-black text-white mb-1" id="mongo-total">—</p>
+          <p class="text-xs text-slate-500 mb-3">produtos cadastrados</p>
+          <div id="mongo-nomes" class="text-xs text-slate-400 font-mono space-y-1"></div>
+        </div>
+
+        <div class="rounded-xl bg-ink-950/60 border border-sky-500/20 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="badge bg-sky-500/15 text-sky-400 border border-sky-500/30">REDIS</span>
+            <span class="text-xs text-slate-500 font-mono">carrinhos</span>
+          </div>
+          <p class="text-4xl font-black text-white mb-1" id="redis-total">—</p>
+          <p class="text-xs text-slate-500 mb-3">carrinhos ativos</p>
+          <div id="redis-lista" class="text-xs text-slate-400 font-mono space-y-1"></div>
+        </div>
+
+        <div class="rounded-xl bg-ink-950/60 border border-purple-500/20 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="badge bg-purple-500/15 text-purple-400 border border-purple-500/30">SQL</span>
+            <span class="text-xs text-slate-500 font-mono">pedidos</span>
+          </div>
+          <p class="text-4xl font-black text-white mb-1" id="sql-total">—</p>
+          <p class="text-xs text-slate-500 mb-3">pedidos totais</p>
+          <div id="sql-lista" class="text-xs text-slate-400 font-mono space-y-1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
